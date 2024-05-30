@@ -1,0 +1,56 @@
+body {
+    font-family: "Roboto";
+    text-align: center;
+    padding-top: 10px;
+}
+
+h1 {
+    color: #ffffff;
+    text-shadow: 0px 0px 10px navy, 2px 2px 10px white, -2px 2px 10px white, 2px -2px 10px white, -2px -2px 10px white;
+    font-size: 32px;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td {
+    border: 2px solid coral;
+}
+
+#content {
+    background: #fffffff0;
+    max-width: 960px;
+    border: rgb(123, 218, 255) 4px solid;
+    box-shadow: 0 0 80px rgba(151, 207, 229, .7);
+    padding: 10px;
+    margin: auto;
+}
+
+#inputs {
+    padding-left: 10px;
+}
+
+#bg {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    /* d6e9ff */
+    background: url("img/bg.png") repeat;
+    animation: bgMove 40s linear infinite;
+}
+
+@keyframes bgMove {
+    from {
+        background-position: bottom left;
+    }
+
+    /*the moving is there just very subtle*/
+    to {
+        background-position: top right;
+    }
+}
