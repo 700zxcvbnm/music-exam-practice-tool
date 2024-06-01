@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
 body {
+    background: #0f1849;
     font-family: "Roboto";
     font-size: 18px;
     text-align: center;
@@ -102,18 +103,33 @@ button {
     left: 0px;
     width: 100vw;
     height: 100vh;
-    background: url("images/bg.png") repeat;
-    animation: bgMove 40s linear infinite;
+    background: url("images/bg.png");
+    background-repeat: round;
+    animation: bgMove 180s linear infinite;
+    overflow: auto;
+    z-index: -1;
+}
+
+#bg2 {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    background: url("images/bg2.png");
+    background-repeat: round;
+    opacity: 0.6;
+    animation: bgMove 100s linear infinite;
     overflow: auto;
     z-index: -1;
 }
 
 @keyframes bgMove {
     from {
-        background-position: bottom left;
+        background-position: 0 0;
     }
 
     to {
-        background-position: top right;
+        background-position: 100vw -100vh;
     }
 }
