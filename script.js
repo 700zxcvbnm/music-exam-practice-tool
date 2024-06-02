@@ -248,12 +248,7 @@ function startQuiz(isReloadSession) {
     questionDisplay = content.querySelector("#question");
     inputs = content.querySelector("#inputs");
 
-    if (isReloadSession == true) {
-        console.log("hell yeah");
-        console.log(getCookie("orderData"));
-        console.log(getCookie("inputData"));
-        console.log(JSON.parse(getCookie("orderData")));
-        console.log(JSON.parse(getCookie("inputData")));
+    if (isReloadSession === true && getCookie("inputData") != null && getCookie("orderData") != null) {
         questionOrder = JSON.parse(getCookie("orderData"));
         userAnswers = JSON.parse(getCookie("inputData"));
     } else {
@@ -262,7 +257,7 @@ function startQuiz(isReloadSession) {
         userAnswers = new Array(quizData.length);
         questionOrder.forEach((questionIndex, index) => {
             userAnswers[index] = new Array(quizData[questionIndex].answers.length).fill("");
-        })
+        });
     }
 
     content.querySelector("#goPrevious").addEventListener("click", function () {
@@ -288,14 +283,16 @@ function startQuiz(isReloadSession) {
 }
 
 // initialize
-if (getCookie("inputData") != null && getCookie("orderData") != null) {
+if (getCookie("inputData") != null && getCookie("orderData") != null) { //found data >:D
     var notice = document.createElement("h3");
     notice.style.color = "#568eff";
     notice.innerText = "!! 偵測到過去進度，啟動自動還原 !!";
 
     content.prepend(notice);
 
-    content.querySelector("#start").addEventListener("click", startQuiz, true); //found data >:D
+    content.querySelector("#start").addEventListener("click", function() {
+        startQuiz(true);
+    });
 } else {
     content.querySelector("#start").addEventListener("click", startQuiz); //no data / data broken D:
 }
