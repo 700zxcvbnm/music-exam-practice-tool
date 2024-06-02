@@ -249,6 +249,11 @@ function startQuiz(isReloadSession) {
     inputs = content.querySelector("#inputs");
 
     if (isReloadSession == true) {
+        console.log("hell yeah");
+        console.log(getCookie("orderData"));
+        console.log(getCookie("inputData"));
+        console.log(JSON.parse(getCookie("orderData")));
+        console.log(JSON.parse(getCookie("inputData")));
         questionOrder = JSON.parse(getCookie("orderData"));
         userAnswers = JSON.parse(getCookie("inputData"));
     } else {
