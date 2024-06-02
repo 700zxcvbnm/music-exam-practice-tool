@@ -71,7 +71,7 @@ const quizData = [
         scores: [2, 1, 1],
     }, {
         audio: "audio/song15.mp3",
-        label: ["曲名", "演唱者", "時期"],
+        label: ["曲名", "演唱者", "族別"],
         answers: ["老人飲酒歌", "郭英男", ["阿美族", "阿美"]],
         scores: [2, 1, 1],
     }, {
@@ -101,18 +101,18 @@ const quizData = [
         scores: [2, 1],
     }, {
         audio: "audio/song21.mp3",
-        label: ["曲名", "時期 (2字)"],
-        answers: ["雨夜花", "日治"],
+        label: ["曲名", "時期"],
+        answers: ["雨夜花", ["日治", "日治時期"]],
         scores: [2, 1],
     }, {
         audio: "audio/song22.mp3",
-        label: ["曲名", "時期 (2字)"],
-        answers: ["望春風", "日治"],
+        label: ["曲名", "時期"],
+        answers: ["望春風", ["日治", "日治時期"]],
         scores: [2, 1],
     }, {
         audio: "audio/song23.mp3",
         label: ["曲名", "時期"],
-        answers: ["燒肉粽", "光復"],
+        answers: ["燒肉粽", ["光復", "光復時期"]],
         scores: [2, 1],
     }, {
         audio: "audio/song24.mp3",
