@@ -21,7 +21,6 @@ function filterText(text) {
 
 function percentToColor(percent) {
     var hue = (percent * 120).toString(10);
-    console.log(hue);
     return `hsl(${hue}, 100%, 34%)`;
 }
 
@@ -149,7 +148,7 @@ function showResults() {
         content.appendChild(div);
     }
 
-    content.innerHTML += `<br><h3 style="color:${scoreColor}">總分: ${userScore}/${totalScore}</h3>`;
+    content.innerHTML += `<br><h3 style="color:${percentToColor(userScore / totalScore)}">總分: ${userScore}/${totalScore}</h3>`;
     content.innerHTML += `<button onclick="location.reload()">try again <i class="fa-solid fa-arrow-right"></i></button>`;
 }
 
