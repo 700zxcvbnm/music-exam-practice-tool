@@ -4,7 +4,7 @@ var inputs;
 
 var currentQuestion = 0;
 var questionOrder;
-var userAnswers = new Array(quizData.length);
+var userAnswers;
 
 // util
 function generateOrder() {
@@ -24,11 +24,84 @@ function percentToColor(percent) {
     return `hsl(${hue}, 100%, 34%)`;
 }
 
-// main
-function loadQuestion() {
-    const question = quizData[questionOrder[currentQuestion]];
+/*
+below 2 functions are stolen from https://stackoverflow.com/questions/4825683/how-do-i-create-and-read-a-value-from-cookie-with-javascript
+its 11:47 pm and the music test is tomorrow and i want to go to sleep Ok ?
+*/
+function setCookie(name, value, days) {
+    var expires;
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toGMTString();
+    }
+    else {
+        expires = "";
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
 
-    questionDisplay.innerHTML = `<h2>question ${currentQuestion + 1}</h2>`;
+function deleteCookie(name) {
+    setCookie(name, "", 1);
+}
+
+function getCookie(c_name) {
+    if (document.cookie.length > 0) {
+        c_start = document.cookie.indexOf(c_name + "=");
+        if (c_start != -1) {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) {
+                c_end = document.cookie.length;
+            }
+            return unescape(document.cookie.substring(c_start, c_end));
+        }
+    }
+    return null;
+}
+
+// main
+function saveData() {
+    setCookie('inputData', JSON.stringify(userAnswers));
+    setCookie('orderData', JSON.stringify(questionOrder));
+}
+
+function handleButtonsDisplay() {
+    var goPrevious = content.querySelector("#goPrevious");
+    var goNext = content.querySelector("#goNext");
+    var submit = content.querySelector("#submit");
+
+    if (currentQuestion == 0) {
+        goPrevious.setAttribute("hidden", "hidden");
+        goNext.removeAttribute("hidden");
+    } else if (currentQuestion == quizData.length - 1) {
+        goPrevious.removeAttribute("hidden");
+        goNext.setAttribute("hidden", "hidden");
+    } else {
+        goPrevious.removeAttribute("hidden");
+        goNext.removeAttribute("hidden");
+    }
+
+    if (currentQuestion == quizData.length - 1) {
+        submit.innerText = "end quiz";
+    } else {
+        submit.innerText = "submit";
+    }
+}
+
+function loadQuestion(questionNumber) {
+    if (questionNumber < 0 || quizData.length <= questionNumber) {
+        console.log(`Error loading question: question number ${questionNumber} out of bound`);
+        
+        return;
+    }
+
+    const question = quizData[questionOrder[questionNumber]];
+    currentQuestion = questionNumber;
+
+    handleButtonsDisplay();
+
+    questionDisplay.innerHTML = `<h2>question ${questionNumber + 1}</h2>`;
     questionDisplay.innerHTML += `
     <audio controls>
         <source src=${question.audio} type="audio/mp3">
@@ -50,6 +123,10 @@ function loadQuestion() {
         input.classList.add("center", "mono");
         input.id = "input" + i;
 
+        if (userAnswers[questionNumber] != null && userAnswers[questionNumber][i] != "") {
+            input.value = userAnswers[questionNumber][i];
+        }
+
         inputCell.appendChild(input);
     }
 
@@ -66,6 +143,8 @@ function submitAnswer() {
 
         userAnswers[currentQuestion][inputNumber] = filterText(input.value);
     });
+
+    saveData();
 }
 
 function showResults() {
@@ -150,32 +229,68 @@ function showResults() {
 
     content.innerHTML += `<br><h3 style="color:${percentToColor(userScore / totalScore)}">總分: ${userScore}/${totalScore}</h3>`;
     content.innerHTML += `<button onclick="location.reload()">try again <i class="fa-solid fa-arrow-right"></i></button>`;
+
+    deleteCookie("inputData");
+    deleteCookie("orderData");
 }
 
-function startQuiz() {
+function startQuiz(isReloadSession) {
     content.innerHTML = `<div id="question">what happened on 1984</div>
 
     <div id="inputs"></div>
     <br>
-    <button id="submit">submit</button>`;
+    <span style="display: inline;">
+        <button hidden="hidden" id="goPrevious"><i class="fa-solid fa-arrow-left"></i></button>
+        <button id="submit">submit</button>
+        <button id="goNext"><i class="fa-solid fa-arrow-right"></i></button>
+    </span>`;
 
     questionDisplay = content.querySelector("#question");
     inputs = content.querySelector("#inputs");
 
-    questionOrder = generateOrder();
+    if (isReloadSession == true) {
+        questionOrder = JSON.parse(getCookie("orderData"));
+        userAnswers = JSON.parse(getCookie("inputData"));
+    } else {
+        questionOrder = generateOrder();
+
+        userAnswers = new Array(quizData.length);
+        questionOrder.forEach((questionIndex, index) => {
+            userAnswers[index] = new Array(quizData[questionIndex].answers.length).fill("");
+        })
+    }
+
+    content.querySelector("#goPrevious").addEventListener("click", function () {
+        loadQuestion(currentQuestion - 1);
+    });
+
+    content.querySelector("#goNext").addEventListener("click", function() {
+        loadQuestion(currentQuestion + 1);
+    });
 
     content.querySelector("#submit").addEventListener("click", function () {
         submitAnswer();
 
         if (currentQuestion + 1 < quizData.length) {
             currentQuestion++;
-            loadQuestion();
+            loadQuestion(currentQuestion);
         } else {
             showResults();
         }
     });
 
-    loadQuestion();
+    loadQuestion(currentQuestion);
 }
 
-content.querySelector("#start").addEventListener("click", startQuiz);
+// initialize
+if (getCookie("inputData") != null && getCookie("orderData") != null) {
+    var notice = document.createElement("h3");
+    notice.style.color = "#568eff";
+    notice.innerText = "!! 偵測到過去進度，啟動自動還原 !!";
+
+    content.prepend(notice);
+
+    content.querySelector("#start").addEventListener("click", startQuiz, true); //found data >:D
+} else {
+    content.querySelector("#start").addEventListener("click", startQuiz); //no data / data broken D:
+}
