@@ -47,7 +47,7 @@ const quizData = [
     }, {
         audio: "audio/song10.mp3",
         label: ["曲名", "作曲家", "時期"],
-        answers: ["小夜曲 K.525", ["莫札特", "Mozart"], "古典"],
+        answers: [["小夜曲 K.525", "K.525 小夜曲"], ["莫札特", "Mozart"], "古典"],
         scores: [2, 1, 1],
     }, {
         audio: "audio/song11.mp3",
