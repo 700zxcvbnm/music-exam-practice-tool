@@ -54,7 +54,12 @@ function getCookie(c_name) {
             if (c_end == -1) {
                 c_end = document.cookie.length;
             }
-            return unescape(document.cookie.substring(c_start, c_end));
+            var result = unescape(document.cookie.substring(c_start, c_end));
+            if (result === '') {
+                return null;
+            }
+            
+            return result;
         }
     }
     return null;
