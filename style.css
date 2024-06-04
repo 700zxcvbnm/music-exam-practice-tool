@@ -124,6 +124,15 @@ button {
     z-index: -1;
 }
 
+#bgtoggle {
+    font-family: "Roboto Mono";
+    border: 2px solid;
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 5px 10px;
+    opacity: 50%;
+}
+
 @keyframes bgMove {
     from {
         background-position: 0 0;
